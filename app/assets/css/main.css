@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import "./scrollbar.css";
+
+@theme {
+  --font-sans: "Geist", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+}
+
+:root {
+  --ui-container: var(--container-3xl);
+  --ui-primary: black;
+
+}
+
+.dark {
+  --ui-bg: #020202;
+  --ui-primary: white;
+}
+
+@layer components{
+ a, button {
+  cursor: pointer;
+ }
+}
