@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod/v4"
 
 const RecipeSchema = z.object({
   id: z.number(),
@@ -16,9 +16,9 @@ const RecipeSchema = z.object({
   image: z.string().url(),
   rating: z.number(),
   reviewCount: z.number(),
-  mealType: z.array(z.string())
-})
+  mealType: z.array(z.string()),
+});
 
-export type Recipe = z.infer<typeof RecipeSchema>
+export type Recipe = z.infer<typeof RecipeSchema>;
 
-export default RecipeSchema
+export default RecipeSchema;

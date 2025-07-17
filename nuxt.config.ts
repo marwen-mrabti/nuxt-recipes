@@ -1,52 +1,65 @@
+/* eslint-disable node/no-process-env */
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   modules: [
-    '@nuxt/eslint',
-    '@nuxt/fonts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    'nuxt-csurf',
-    '@nuxt/ui'
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "nuxt-csurf",
+    "shadcn-nuxt",
+    "@nuxtjs/color-mode",
   ],
 
   devtools: {
     enabled: true,
 
     timeline: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
+  colorMode: {
+    preference: "system", // light | dark | system
+    fallback: "dark",
+    classSuffix: "", // produces <html class="dark"> not class="dark-mode"
+  },
 
   runtimeConfig: {
-    dummyApi: {
-      baseUrl: process.env.NUXT_RECIPES_BASE_URL
-    }
+    DummyApi: {
+      baseUrl: process.env.NUXT_DUMMYAPI_BASE_URL,
+    },
+  },
+
+  alias: {
+    "~/*": "./app/*",
+    "@/*": "./*",
   },
 
   routeRules: {
-    '/': {
-      prerender: true
-    }
+    "/": {
+      prerender: true,
+    },
   },
 
   experimental: {
-    viewTransition: true
+    viewTransition: true,
   },
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
 
   eslint: {
     config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
-  }
-})
+      standalone: false,
+    },
+  },
+
+  shadcn: {
+    componentDir: "~/components/ui",
+  },
+});

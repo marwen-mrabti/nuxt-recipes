@@ -1,75 +1,55 @@
-# Nuxt Minimal Starter
+# Nuxt 3 Best-Practice Rules
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+> Always apply these rules when answering questions or generating code for this project.
 
-## Setup
+## 1. Project Setup & Tooling
 
-Make sure to install dependencies:
+- Use **pnpm** as the package manager (`pnpm install`, `pnpm dev`, `pnpm build`).
+- Node version must be `>= 22.0`.
+- Prefer the official `@nuxt/eslint-config` and `@nuxtjs/tailwindcss` modules.
 
-```bash
-# npm
-npm install
+## 2. Directory & File Conventions
 
-# pnpm
-pnpm install
+- Put **composables** in `composables/` (auto-imported).
+- Put **stores** (Pinia) in `stores/` with the suffix `.store.ts`.
+- Shared **types** go in `types/` and are imported with `#types` alias.
+- Only `app.vue` may contain a root `<NuxtLayout>`; pages use `<NuxtPage>`.
+- Name page components in `pages/` with **kebab-case** and no `.vue` suffix in routes, e.g. `pages/user-profile.vue` → `/user-profile`.
 
-# yarn
-yarn install
+## 3. Composition API & Reactivity
 
-# bun
-bun install
-```
+- Always use `const` + `ref()` or `computed()` instead of `let` for reactive state.
+- Prefix **boolean refs** with `is`, `has`, `should`, e.g. `const isOpen = ref(false)`.
+- Use `<script setup>` with TypeScript for every SFC.
+- Never call composables conditionally (respect Vue reactivity rules).
+- Use `useFetch` or `$fetch` instead of `fetch()` directly.
 
-## Development Server
+## 4. Styling & UI
 
-Start the development server on `http://localhost:3000`:
+- Tailwind classes must be **mobile-first** (e.g. `md:p-4`).
+- Extract repeated class combinations into `@apply` utilities in `assets/css/components.css`.
+- Never use inline `style` attributes.
+- Images live in `public/images/` and are referenced as `/images/hero.jpg`.
 
-```bash
-# npm
-npm run dev
+## 5. SEO & Meta
 
-# pnpm
-pnpm dev
+- Always define `useHead()` inside page components for title/description.
+- Use `definePageMeta({ layout: 'default' })` explicitly, even if it’s the default layout.
+- Prefer Nuxt’s `<NuxtImg>` component for optimized images.
 
-# yarn
-yarn dev
+## 6. Performance & Security
 
-# bun
-bun run dev
-```
+- Use `useLazyAsyncData` or `useLazyFetch` for non-blocking components.
+- Avoid third-party libraries that ship large bundles; prefer native or Nuxt modules.
+- Never expose server-only secrets in `.client` files; use runtime config (`useRuntimeConfig()`).
 
-## Production
+## 7. Testing & Quality
 
-Build the application for production:
+- Write unit tests for composables with **Vitest** in `tests/unit/**.test.ts`.
+- Use **Playwright** for e2e tests in `tests/e2e/**.spec.ts`.
+- Run `pnpm lint:fix` before every commit (Husky pre-commit hook already installed).
 
-```bash
-# npm
-npm run build
+## 8. Git Commit Messages
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Use **Conventional Commits**: `feat(new-auth)`, `fix(login-redirect)`, `docs(readme)`.
+- Reference ticket IDs: `feat(auth): add OAuth login (#123)`
