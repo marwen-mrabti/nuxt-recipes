@@ -34,11 +34,6 @@ export default defineNuxtConfig({
     },
   },
 
-  alias: {
-    "~/*": "./app/*",
-    "@/*": "./*",
-  },
-
   routeRules: {
     "/": {
       prerender: true,

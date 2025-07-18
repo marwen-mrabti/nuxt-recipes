@@ -29,7 +29,6 @@ function handlePageChange(newPage: number) {
     :total="props.total"
     :current-page="currentPage"
     :default-page="1"
-    show-edges
     @update:page="handlePageChange"
   >
     <PaginationContent v-slot="{ items }">
