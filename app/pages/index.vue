@@ -70,21 +70,31 @@ const total = computed(() => data.value?.total || 0);
           />
         </div>
         <p class="text-balance group-hover/recipe:text-accent-foreground group-hover/recipe:animate-pulse transition-all ease-linear duration-200">
-          <NuxtLink :to="{ name: 'recipe-id', params: { id: recipe.id } }" class="flex items-center gap-2">
+          <NuxtLink
+            :to="{ name: 'recipe-id', params: { id: recipe.id } }"
+            prefetch-on="interaction"
+            class="flex items-center gap-2"
+          >
             <Icon name="i-tabler-chevron-right" class="size-5" />
             {{ recipe.name }}
           </NuxtLink>
         </p>
-        <p class="text-pretty flex items-center w-full gap-2">
-          <span>rating: </span>
-          <span
-            v-for="(_, index) in Math.floor(recipe.rating)"
-            :key="index"
-            class="flex flex-row gap-1 items-center"
-          >
-            <Icon name="i-tabler-star-filled" class="size-5 text-amber-400" />
-          </span>
-        </p>
+        <div class="text-pretty flex justify-between items-center w-full gap-2">
+          <p class="flex items-center gap-1 text-xs whitespace-nowrap">
+            <Icon name="i-tabler-map-pin" class="size-5" />
+            <span>{{ recipe.cuisine || "Unknown Cuisine" }}</span>
+          </p>
+          <p class="flex items-center gap-1">
+            <span>rating: </span>
+            <span
+              v-for="(_, index) in Math.floor(recipe.rating)"
+              :key="index"
+              class="flex flex-row gap-1 items-center"
+            >
+              <Icon name="i-tabler-star-filled" class="size-5 text-amber-400" />
+            </span>
+          </p>
+        </div>
       </li>
     </ul>
   </main>

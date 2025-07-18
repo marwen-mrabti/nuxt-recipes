@@ -21,11 +21,12 @@ const imageLoaded = ref(false);
 
 const { data: recipe, error, status } = await useFetch(`/api/recipes/${id.value}`, {
   key: `recipe-${id.value}`,
+  watch: [id],
   lazy: true,
 });
 
 function getDifficultyColor(difficulty: string) {
-  switch (difficulty.toLowerCase()) {
+  switch (difficulty?.toLowerCase()) {
     case "easy":
       return "bg-green-100 text-green-800";
     case "medium":
@@ -44,7 +45,7 @@ useHead({
 <template>
   <div class="container mx-auto px-4 py-8">
     <div v-if="status === 'pending'">
-      <p>Loading...</p>
+      <RecipeLoadingSkeleton />
     </div>
     <div v-else-if="status === 'error' || !recipe">
       <p class="text-error-400">

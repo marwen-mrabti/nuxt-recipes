@@ -10,9 +10,10 @@ export const getRecipes = defineCachedFunction(
         query: {
           page,
           limit,
-          select: ["id", "name", "image", "rating"],
+          select: ["id", "name", "image", "rating", "cuisine"],
           skip: (page - 1) * limit, // how many items to skip (db indexes from 0 so we subtract 1)
           sort: "rating",
+          order: "asc",
         },
       },
     );
@@ -32,9 +33,7 @@ export const getRecipeById = defineCachedFunction(
   async ({ event, id }: { event: H3Event; id: string }) => {
     const dummyApiUrl = useRuntimeConfig(event).DummyApi.baseUrl;
     const recipe = await $fetch<Recipe>(`${dummyApiUrl}/${id}`, {
-      query: {
-        // select: ["id", "name", "image", "rating", "description", "ingredients"],
-      },
+
     });
     return recipe;
   },
