@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 const route = useRoute();
 
 const page = computed(() => Number(route.query.page || 1));
-const imageLoaded = ref(false);
+const imageLoaded = useState("imageLoaded", () => false);
 
 const {
   data,
@@ -55,22 +55,23 @@ const total = computed(() => data.value?.total || 0);
       <li
         v-for="recipe in recipes"
         :key="recipe.id"
-        class="aspect-square grid grid-rows-subgrid row-span-3 gap-4 border-2 border-neutral-200 rounded-sm p-2"
+        class="group/recipe aspect-square grid grid-rows-subgrid row-span-3 gap-4 border-2 border-neutral-200 rounded-sm p-2"
       >
         <div class="h-64 overflow-hidden rounded bg-gray-100 mb-4 relative">
           <div v-if="!imageLoaded" class="absolute inset-0 bg-gray-200 animate-pulse rounded" />
           <NuxtImg
             :src="recipe.image"
             :alt="recipe.name"
-            class="size-full object-cover object-center"
+            class="size-full object-cover object-center group-hover/recipe:grayscale-75 transition-all ease-in-out duration-300"
             loading="lazy"
             placeholder
             @load="imageLoaded = true"
             @error="imageLoaded = false"
           />
         </div>
-        <p class="text-balance">
-          <NuxtLink to="#">
+        <p class="text-balance group-hover/recipe:text-accent-foreground group-hover/recipe:animate-pulse transition-all ease-linear duration-200">
+          <NuxtLink :to="{ name: 'recipe-id', params: { id: recipe.id } }" class="flex items-center gap-2">
+            <Icon name="i-tabler-chevron-right" class="size-5" />
             {{ recipe.name }}
           </NuxtLink>
         </p>

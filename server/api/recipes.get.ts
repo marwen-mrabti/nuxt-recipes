@@ -1,4 +1,4 @@
-import { getRecipes } from "@@/server/helpers/get-recipes";
+import { getRecipes } from "~~/server/utils/recipes";
 import { z } from "zod/v4";
 
 const queryScheme = z.object({
@@ -17,12 +17,13 @@ export default defineEventHandler(async (event) => {
 
   try {
     const { page, limit } = validatedQuery.data;
-    const { recipes, total } = await getRecipes({ page, limit });
+    const { recipes, total } = await getRecipes({ event, page, limit });
 
     return { recipes, total };
   }
   catch (e) {
-    // console.log(e);
+    // eslint-disable-next-line no-console
+    console.log(e);
     return sendError(event, createError({
       statusCode: 404,
       statusMessage: "failed to fetch recipes! please try again",

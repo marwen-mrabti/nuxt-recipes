@@ -1,6 +1,11 @@
 <template>
-  <div class="relative isolate">
+  <div class="relative isolate container mx-auto max-w-7xl ">
     <header class="sticky top-0 z-50 w-full flex items-center justify-end py-2 px-4">
+      <NuxtLink to="/" class="mr-auto">
+        <h2>
+          <span class="text-2xl font-bold text-primary">Nuxt Recipes</span>
+        </h2>
+      </NuxtLink>
       <ToggleColorMode />
     </header>
     <slot />
