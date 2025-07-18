@@ -1,7 +1,7 @@
 // @ts-check
-import antfu from "@antfu/eslint-config"
+import antfu from "@antfu/eslint-config";
 
-import withNuxt from "./.nuxt/eslint.config.mjs"
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt(
   antfu(
@@ -13,9 +13,9 @@ export default withNuxt(
       stylistic: {
         indent: 2,
         semi: true,
-        quotes: "double"
+        quotes: "double",
       },
-      ignores: [".pnpm-store/**", "**/migrations/*", "./node_modules/*"]
+      ignores: [".pnpm-store/**", "**/migrations/*", "./node_modules/*", "./app/components/ui/*"],
     },
     {
       rules: {
@@ -27,7 +27,7 @@ export default withNuxt(
             },
             multiline: {
               max: 1,
-            }
+            },
           },
         ],
         "ts/no-redeclare": "off",
@@ -39,17 +39,17 @@ export default withNuxt(
         "perfectionist/sort-imports": [
           "error",
           {
-            tsconfigRootDir: "."
+            tsconfigRootDir: ".",
           },
         ],
         "unicorn/filename-case": [
           "error",
           {
             case: "kebabCase",
-            ignore: ["README.md"]
+            ignore: ["README.md"],
           },
-        ]
+        ],
       },
-    }
+    },
   ),
-)
+);

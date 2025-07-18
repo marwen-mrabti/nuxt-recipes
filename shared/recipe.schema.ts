@@ -1,4 +1,4 @@
-import { z } from "zod/v4"
+import { z } from "zod/v4";
 
 const RecipeSchema = z.object({
   id: z.number(),

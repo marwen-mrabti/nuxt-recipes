@@ -1,35 +1,46 @@
 <script lang="ts" setup>
-import type { Recipe } from "@/shared/recipe.schema";
-
+import ListPagination from "~/components/list-pagination.vue";
 import { Button } from "~/components/ui/button";
 
+const route = useRoute();
+
+const page = computed(() => Number(route.query.page || 1));
 const imageLoaded = ref(false);
+
 const {
-  data: recipes,
+  data,
   status,
   error,
   refresh,
-} = await useFetch<Recipe[]>("/api/recipes", {
-  lazy: true,
+} = await useFetch("/api/recipes", {
+  query: { page },
   key: "recipes",
+  watch: [page],
+  lazy: true,
 });
+const recipes = computed(() => data.value?.recipes || []);
+const total = computed(() => data.value?.total || 0);
 </script>
 
 <template>
   <main class="container mx-auto space-y-6 py-4 px-4">
-    <h2 class="text-2xl">
-      Recipes
-    </h2>
-    <Button
-      v-show="status !== 'error' && status !== 'pending'"
-      color="secondary"
-      class="w-fit px-2"
-      variant="outline"
-      :disabled="status === 'pending'"
-      @click="() => refresh()"
-    >
-      refetch
-    </Button>
+    <div class="flex items-center gap-6">
+      <h2 class="text-2xl">
+        Recipes
+      </h2>
+      <Button
+        v-show="status !== 'error'"
+        class="w-fit px-2 bg-accent text-accent-foreground"
+        variant="outline"
+        :disabled="status === 'pending'"
+        @click="() => refresh()"
+      >
+        refetch
+      </Button>
+      <div class="flex-1 flex justify-center">
+        <ListPagination :total="total" />
+      </div>
+    </div>
     <RecipesLoadingSkeleton v-if="status === 'pending'" />
     <div v-else-if="status === 'error'">
       <p class="text-error-400">
