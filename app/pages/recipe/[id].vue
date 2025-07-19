@@ -15,9 +15,11 @@ import {
   Zap,
 } from "lucide-vue-next";
 
+import { Skeleton } from "~/components/ui/skeleton";
+
 const route = useRoute();
 const id = computed(() => route.params.id);
-const imageLoaded = ref(false);
+const imageState = useState<"loading" | "loaded" | "error">("imageState", () => "loading");
 
 const { data: recipe, error, status } = await useFetch(`/api/recipes/${id.value}`, {
   key: `recipe-${id.value}`,
@@ -56,14 +58,24 @@ useHead({
       <div class="min-h-screen bg-gray-50">
         <!-- Hero Section -->
         <div class="relative h-96 overflow-hidden isolate">
-          <NuxtImg
-            :src="recipe?.image"
-            :alt="recipe?.name"
-            class="w-full h-full object-cover object-center"
-            loading="lazy"
-            @load="imageLoaded = true"
-            @error="imageLoaded = false"
-          />
+          <div class="h-64 overflow-hidden rounded mb-4 bg-gray-100 relative">
+            <Skeleton v-if="imageState === 'loading'" class="absolute inset-0" />
+            <div v-else-if="imageState === 'error'" class="absolute inset-0 bg-gray-300 flex flex-col items-center justify-center text-pretty">
+              <span class="text-destructive font-medium">Image failed to load!</span>
+              <span class="text-secondary font-semibold">Try reloading the page</span>
+            </div>
+            <NuxtImg
+              v-if="recipe?.image"
+              :src="recipe?.image"
+              :alt="recipe?.name"
+              class="w-full h-full object-cover object-center"
+              loading="lazy"
+              provider="dummyjson"
+              placeholder
+              @load="imageState = 'loaded'"
+              @error="imageState = 'error'"
+            />
+          </div>
           <div class="absolute inset-0 bg-black opacity-85 flex items-end">
             <div class="container mx-auto px-4 pb-8">
               <div class="text-white">

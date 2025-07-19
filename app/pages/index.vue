@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import ListPagination from "~/components/list-pagination.vue";
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 
 const route = useRoute();
 
 const page = computed(() => Number(route.query.page || 1));
-const imageLoaded = useState("imageLoaded", () => false);
+const imageState = useState<"loading" | "loaded" | "error">("imageState", () => "loading");
 
 const {
   data,
@@ -37,6 +38,7 @@ const total = computed(() => data.value?.total || 0);
       >
         refetch
       </Button>
+
       <div class="flex-1 flex justify-center">
         <ListPagination :total="total" />
       </div>
@@ -57,18 +59,24 @@ const total = computed(() => data.value?.total || 0);
         :key="recipe.id"
         class="group/recipe aspect-square grid grid-rows-subgrid row-span-3 gap-4 border-2 border-neutral-200 rounded-sm p-2"
       >
-        <div class="h-64 overflow-hidden rounded bg-gray-100 mb-4 relative">
-          <div v-if="!imageLoaded" class="absolute inset-0 bg-gray-200 animate-pulse rounded" />
+        <div class="h-64 overflow-hidden rounded mb-4 bg-gray-100 relative">
+          <Skeleton v-if="imageState === 'loading'" class="absolute inset-0" />
+          <div v-else-if="imageState === 'error'" class="absolute inset-0 bg-gray-300 flex flex-col items-center justify-center text-pretty">
+            <span class="text-destructive font-medium">Image failed to load!</span>
+            <span class="text-secondary font-semibold">Try reloading the page</span>
+          </div>
           <NuxtImg
+            v-if="recipe.image"
             :src="recipe.image"
             :alt="recipe.name"
             class="size-full object-cover object-center group-hover/recipe:grayscale-75 transition-all ease-in-out duration-300"
             loading="lazy"
-            placeholder
-            @load="imageLoaded = true"
-            @error="imageLoaded = false"
+            provider="dummyjson"
+            @load="imageState = 'loaded'"
+            @error="imageState = 'error'"
           />
         </div>
+
         <p class="text-balance group-hover/recipe:text-accent-foreground group-hover/recipe:animate-pulse transition-all ease-linear duration-200">
           <NuxtLink
             :to="{ name: 'recipe-id', params: { id: recipe.id } }"

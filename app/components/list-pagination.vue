@@ -28,7 +28,7 @@ function handlePageChange(newPage: number) {
     :items-per-page="6"
     :total="props.total"
     :current-page="currentPage"
-    :default-page="1"
+    :default-page="currentPage || 1"
     @update:page="handlePageChange"
   >
     <PaginationContent v-slot="{ items }">

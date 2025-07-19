@@ -40,6 +40,21 @@ export default defineNuxtConfig({
     },
   },
 
+  image: {
+    quality: 75,
+    format: ["webp"],
+    domains: ["dummyjson.com"],
+    providers: {
+      dummyjson: {
+        name: "dummyjson",
+        provider: "@@/providers/dummyjson.ts",
+        options: {
+          baseURL: process.env.NUXT_DUMMYAPI_BASE_URL,
+        },
+      },
+    },
+  },
+
   experimental: {
     viewTransition: true,
   },
