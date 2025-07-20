@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     "nuxt-csurf",
     "shadcn-nuxt",
     "@nuxtjs/color-mode",
+    // "@peterbud/nuxt-query",
   ],
 
   devtools: {
@@ -72,4 +73,23 @@ export default defineNuxtConfig({
   shadcn: {
     componentDir: "~/components/ui",
   },
+
+  // nuxtQuery: {
+  //   devtools: true,
+  //   queryClientOptions: {
+  //     defaultOptions: {
+  //       queries: {
+  //         retry: 3,
+  //         retryDelay: 500,
+  //         staleTime: 1000 * 60 * 5, // ! the data will be considered stale after 15 minutes
+  //         gcTime: 1000 * 60 * 30, // ! the cache will be cleared after 30 minute of inactivity
+  //         refetchOnWindowFocus: true,
+  //         throwOnError: (_error: any, query: { state: { data: any } }) => {
+  //           return typeof query.state.data === "undefined";
+  //         },
+  //         networkMode: "offlineFirst",
+  //       },
+  //     },
+  //   },
+  // },
 });

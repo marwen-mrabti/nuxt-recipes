@@ -15,8 +15,8 @@ useHead({
   },
 });
 
-const title = "Nuxt recipes";
-const description = "find recipes for delicious meals.";
+const title = "Nuxt Recipes";
+const description = "find your favorite recipes and cook them with ease.";
 
 useSeoMeta({
   title,
@@ -27,8 +27,9 @@ useSeoMeta({
 </script>
 
 <template>
+  <NuxtRouteAnnouncer />
+  <NuxtLoadingIndicator color="var(--ui-primary)" />
   <NuxtLayout>
-    <NuxtLoadingIndicator color="var(--ui-primary)" />
     <NuxtPage />
   </NuxtLayout>
 </template>

@@ -6,7 +6,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 const route = useRoute();
 
 const page = computed(() => Number(route.query.page || 1));
-const imageState = useState<"loading" | "loaded" | "error">("imageState", () => "loading");
+const imageState = useState<"loading" | "loaded" | "error">("recipe-image-state", () => "loading");
 
 const {
   data,
@@ -15,9 +15,30 @@ const {
   refresh,
 } = await useFetch("/api/recipes", {
   query: { page },
-  key: "recipes",
+  key: () => `recipes-on_page:${page.value}`,
   watch: [page],
   lazy: true,
+  transform: (payload) => {
+    return {
+      ...payload,
+      fetchedAt: new Date(),
+    };
+  },
+  getCachedData: (key, nuxtApp, _ctx) => {
+    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+    if (!data) {
+      return;
+    }
+
+    const expiration = new Date(data.fetchedAt);
+    expiration.setTime(expiration.getTime() + 2 * 60 * 60 * 1000);
+    const isExpired = expiration < new Date();
+    if (isExpired) {
+      return;
+    }
+
+    return data;
+  },
 });
 const recipes = computed(() => data.value?.recipes || []);
 const total = computed(() => data.value?.total || 0);

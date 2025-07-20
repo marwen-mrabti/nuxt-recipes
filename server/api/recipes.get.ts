@@ -1,4 +1,4 @@
-import { getRecipes } from "~~/server/utils/recipes";
+import { delay, getRecipes } from "~~/server/utils/recipes";
 import { z } from "zod/v4";
 
 const queryScheme = z.object({
@@ -18,7 +18,6 @@ export default defineEventHandler(async (event) => {
   try {
     const { page, limit } = validatedQuery.data;
     const { recipes, total } = await getRecipes({ event, page, limit });
-
     return { recipes, total };
   }
   catch (e) {

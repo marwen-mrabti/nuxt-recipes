@@ -44,7 +44,7 @@ function handlePageChange(newPage: number) {
         </PaginationItem>
       </template>
 
-      <PaginationEllipsis :index="4" />
+      <PaginationEllipsis :index="3" />
 
       <PaginationNext />
     </PaginationContent>

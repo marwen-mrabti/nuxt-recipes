@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import {
+  ArrowLeft,
   BookOpen,
   ChefHat,
   Clock,
@@ -15,16 +16,39 @@ import {
   Zap,
 } from "lucide-vue-next";
 
+import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 
 const route = useRoute();
+const router = useRouter();
 const id = computed(() => route.params.id);
-const imageState = useState<"loading" | "loaded" | "error">("imageState", () => "loading");
+const imageState = useState<"loading" | "loaded" | "error">("cover-image-state", () => "loading");
 
 const { data: recipe, error, status } = await useFetch(`/api/recipes/${id.value}`, {
-  key: `recipe-${id.value}`,
+  key: () => `recipe-with_id:${id.value}`,
   watch: [id],
   lazy: true,
+  transform: (payload) => {
+    return {
+      ...payload,
+      fetchedAt: new Date(),
+    };
+  },
+  getCachedData: (key, nuxtApp, _ctx) => {
+    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+    if (!data) {
+      return; // No cached data available, initiate a new fetch request
+    }
+
+    const expiration = new Date(data.fetchedAt);
+    expiration.setTime(expiration.getTime() + 2 * 60 * 60 * 1000); // Set expiration to 2 hours
+    const isExpired = expiration < new Date();
+    if (isExpired) {
+      return; // Cached data is expired, initiate a new fetch request
+    }
+
+    return data; // Return cached data if it is not expired
+  },
 });
 
 function getDifficultyColor(difficulty: string) {
@@ -39,8 +63,14 @@ function getDifficultyColor(difficulty: string) {
       return "bg-gray-100 text-gray-800";
   }
 }
+
+const title = computed(() => recipe.value ? recipe.value.name : "Loading...");
+useSeoMeta({
+  title,
+  ogTitle: title,
+});
 useHead({
-  title: `${recipe.value ? recipe.value.name : "Loading..."}`,
+  title,
 });
 </script>
 
@@ -55,6 +85,15 @@ useHead({
       </p>
     </div>
     <div v-else>
+      <Button
+        variant="link"
+        class="mb-4"
+        size="lg"
+        @click="() => router.back()"
+      >
+        <ArrowLeft class="w-4 h-4" />
+        <span>Back to Recipes</span>
+      </Button>
       <div class="min-h-screen bg-gray-50">
         <!-- Hero Section -->
         <div class="relative h-96 overflow-hidden isolate">

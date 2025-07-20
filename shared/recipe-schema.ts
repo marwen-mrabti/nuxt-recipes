@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
 
-const RecipeSchema = z.object({
+export const RecipeSchema = z.object({
   id: z.number(),
   name: z.string(),
   ingredients: z.array(z.string()),
@@ -19,6 +19,10 @@ const RecipeSchema = z.object({
   mealType: z.array(z.string()),
 });
 
-export type Recipe = z.infer<typeof RecipeSchema>;
+export const PaginatedRecipesSchema = z.object({
+  recipes: z.array(RecipeSchema),
+  total: z.number(),
+});
 
-export default RecipeSchema;
+export type Recipe = z.infer<typeof RecipeSchema>;
+export type PaginatedRecipes = z.infer<typeof PaginatedRecipesSchema>;
